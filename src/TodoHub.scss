@@ -24,12 +24,19 @@
 .item-options {
   display: none;
 }
-.item-segment:hover .item-options {
+
+.item-segment {
   display: flex;
   align-items: flex-end;
+
+  &:hover .item-options {
+    display: flex;
+    align-items: flex-end;
+    margin-left: auto;
+  }
 }
 
-.edit-item {
+.item-segment .edit-item {
   &:hover {
     color: darkgreen;
   }

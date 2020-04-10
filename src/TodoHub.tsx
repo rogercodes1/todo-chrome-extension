@@ -89,7 +89,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       }
       const localItems = [...this.state.localItems, this.state.item];
       const items = [...this.state.items, jsonItem];
-      this.setState({ localItems, items });
+      this.setState({ localItems, items, item: "" });
 
       localStorage.setItem("local", localItems.toString());
       localStorage.setItem(this.state.item, JSON.stringify(jsonItem));
@@ -105,31 +105,27 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       count++;
       return (
         <Segment key={count} vertical className="item-segment">
-          <List.Item>
-            <Checkbox
-              checked={item.checked}
-              onClick={this.handleCheckboxClick}
+          <Checkbox checked={item.checked} onClick={this.handleCheckboxClick} />
+          <List.Icon name="github" size="large" verticalAlign="middle" />
+          <List.Content name={item.value}>
+            <span id={item.value}>{item.value}</span>
+            <span>- {item.date}</span>
+          </List.Content>
+          {/* <div></div> */}
+          <div className="item-options">
+            <List.Icon
+              className="edit-item"
+              name="edit"
+              size="large"
+              verticalAlign="middle"
             />
-            <List.Icon name="github" size="large" verticalAlign="middle" />
-            <List.Content name={item}>
-              {item.value} - {item.date}
-            </List.Content>
-            <div></div>
-            <div className="item-options">
-              <List.Icon
-                className="edit-item"
-                name="edit"
-                size="large"
-                verticalAlign="middle"
-              />
-              <List.Icon
-                className="x-item"
-                name="x"
-                size="large"
-                verticalAlign="middle"
-              />
-            </div>
-          </List.Item>
+            <List.Icon
+              className="x-item"
+              name="x"
+              size="large"
+              verticalAlign="middle"
+            />
+          </div>
         </Segment>
       );
     });
@@ -160,6 +156,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
   ): void => {
     console.log(e);
     console.log(data);
+    debugger;
   };
 }
 
