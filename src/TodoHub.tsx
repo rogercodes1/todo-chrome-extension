@@ -7,7 +7,7 @@ import {
   Input,
   List,
   Checkbox,
-  CheckboxProps
+  CheckboxProps,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { currentTime, todaysDateAlt } from "./Helpers/utilities";
@@ -26,7 +26,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
 
     this.state = {
       items: [],
-      item: ""
+      item: "",
     };
   }
 
@@ -35,7 +35,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     let localItems: string[] = local ? local.split(",") : [];
 
     this.setState({
-      items: [...this.state.items, ...localItems]
+      items: [...this.state.items, ...localItems],
     });
   }
 
@@ -65,11 +65,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     );
   }
 
-  handleItemChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ item: e.target.value });
-  }
-
-  addItem(e: FormEvent<HTMLFormElement>) {
+  private addItem(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (this.state.item.length < 1) {
@@ -85,7 +81,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
         jsonItem = {
           checked: false,
           value: this.state.item,
-          date: "date now"
+          date: "date now",
         };
       }
       const finalItems = [...this.state.items, this.state.item];
@@ -99,9 +95,9 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     }
   }
 
-  renderItems(): JSX.Element[] {
+  private renderItems(): JSX.Element[] {
     let count = 0;
-    return this.state.items.map(item => {
+    return this.state.items.map((item) => {
       count++;
       return (
         <Segment key={count} vertical className="item-segment">
@@ -129,6 +125,11 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       );
     });
   }
+
+  private handleItemChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ item: e.target.value });
+  }
+
   private handleCheckboxClick = (
     e: React.MouseEvent<HTMLInputElement, MouseEvent>,
     data: CheckboxProps
