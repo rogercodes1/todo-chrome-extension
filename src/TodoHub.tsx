@@ -15,7 +15,7 @@ import { currentTime, todaysDateAlt } from "./Helpers/utilities";
 interface IHubProps {}
 interface IHubState {
   item: string;
-  items: string[];
+  items: any[];
 }
 
 class TodoHub extends React.Component<IHubProps, IHubState> {
@@ -33,9 +33,9 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
   public async componentDidMount() {
     const local = localStorage.getItem("local");
     let localItems: string[] = local ? local.split(",") : [];
-
+    const itemsData: any[] = this.getItems(localItems);
     this.setState({
-      items: [...this.state.items, ...localItems],
+      items: [...this.state.items, ...itemsData],
     });
   }
 
@@ -45,7 +45,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       <div className="main">
         <Segment className="mt-5 main-segment">
           <Header className="flex-col">
-            <span>Today </span>
+            <span>Today</span>
             <span>{todaysDateAlt()}</span>
             <span>{currentTime()}</span>
           </Header>
@@ -102,9 +102,14 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       return (
         <Segment key={count} vertical className="item-segment">
           <List.Item>
-            <Checkbox onClick={this.handleCheckboxClick} />
+            <Checkbox
+              checked={item.checked}
+              onClick={this.handleCheckboxClick}
+            />
             <List.Icon name="github" size="large" verticalAlign="middle" />
-            <List.Content name={item} content={item} />
+            <List.Content name={item}>
+              {item.value} - {item.date}
+            </List.Content>
             <div></div>
             <div className="item-options">
               <List.Icon
@@ -125,6 +130,21 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       );
     });
   }
+
+  private getItems = (localItems: string[]): any[] => {
+    return localItems.map((item) => {
+      const getItem = localStorage.getItem(item);
+      if (getItem) {
+        return JSON.parse(getItem);
+      } else {
+        return {
+          checked: false,
+          value: item,
+          date: "date now",
+        };
+      }
+    });
+  };
 
   private handleItemChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ item: e.target.value });
