@@ -24,6 +24,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     super(props);
     this.handleItemChange = this.handleItemChange.bind(this);
     this.addItem = this.addItem.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
 
     this.state = {
       localItems: [],
@@ -68,50 +69,23 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     );
   }
 
-  private addItem(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    if (this.state.item.length < 1) {
-      return;
-    }
-    try {
-      let jsonItem: any;
-      let getItem: string | null = localStorage.getItem(this.state.item);
-
-      if (getItem) {
-        jsonItem = JSON.parse(getItem);
-      } else {
-        jsonItem = {
-          checked: false,
-          value: this.state.item,
-          date: currentTime(),
-        };
-      }
-      const localItems = [...this.state.localItems, this.state.item];
-      const items = [...this.state.items, jsonItem];
-      this.setState({ localItems, items, item: "" });
-
-      localStorage.setItem("local", localItems.toString());
-      localStorage.setItem(this.state.item, JSON.stringify(jsonItem));
-      e.currentTarget.addTodo.value = "";
-    } catch (err) {
-      console.log("Error", err);
-    }
-  }
-
   private renderItems(): JSX.Element[] {
     let count = 0;
     return this.state.items.map((item) => {
       count++;
+      const strike = item.checked ? "strike" : "";
       return (
-        <Segment key={count} vertical className="item-segment">
-          <Checkbox checked={item.checked} onClick={this.handleCheckboxClick} />
+        <Segment key={count} vertical className={`item-segment ${strike}`}>
+          <Checkbox
+            name={item.value}
+            checked={item.checked}
+            onChange={this.handleCheckboxChange}
+          />
           <List.Icon name="github" size="large" verticalAlign="middle" />
           <List.Content name={item.value}>
             <span id={item.value}>{item.value}</span>
-            <span>- {item.date}</span>
+            <span> - {item.date}</span>
           </List.Content>
-          {/* <div></div> */}
           <div className="item-options">
             <List.Icon
               className="edit-item"
@@ -146,17 +120,65 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     });
   };
 
+  private addItem(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (this.state.item.length < 1) {
+      return;
+    }
+    try {
+      let jsonItem: any;
+      let getItem: string | null = localStorage.getItem(this.state.item);
+
+      if (getItem) {
+        jsonItem = JSON.parse(getItem);
+      } else {
+        jsonItem = {
+          checked: false,
+          value: this.state.item,
+          date: currentTime(),
+        };
+      }
+      const localItems = [...this.state.localItems, this.state.item];
+      const items = [...this.state.items, jsonItem];
+      this.setState({ localItems, items, item: "" });
+
+      localStorage.setItem("local", localItems.toString());
+      localStorage.setItem(this.state.item, JSON.stringify(jsonItem));
+      e.currentTarget.addTodo.value = "";
+    } catch (err) {
+      console.log("Error", err);
+    }
+  }
+
   private handleItemChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ item: e.target.value });
   }
 
-  private handleCheckboxClick = (
-    e: React.MouseEvent<HTMLInputElement, MouseEvent>,
+  private handleCheckboxChange = (
+    e: React.FormEvent<HTMLInputElement>,
     data: CheckboxProps
   ): void => {
-    console.log(e);
-    console.log(data);
-    debugger;
+    let item: any;
+    let storageItem: string | null = localStorage.getItem(data.name!);
+
+    if (storageItem) {
+      item = JSON.parse(storageItem);
+      item.checked = !item.checked;
+      localStorage.setItem(item.value, JSON.stringify(item));
+      this.setState((prevState, props) => ({
+        items: this.updateItemCheckbox(item, prevState.items),
+      }));
+    }
+  };
+
+  private updateItemCheckbox = (item: any, items: any): any => {
+    return items.map((prevItem: any) => {
+      if (prevItem.value === item.value) {
+        prevItem.checked = item.checked;
+      }
+      return prevItem;
+    });
   };
 }
 
