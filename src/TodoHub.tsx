@@ -14,6 +14,7 @@ import { currentTime, todaysDateAlt } from "./Helpers/utilities";
 
 interface IHubProps {}
 interface IHubState {
+  localItems: string[];
   item: string;
   items: any[];
 }
@@ -25,6 +26,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     this.addItem = this.addItem.bind(this);
 
     this.state = {
+      localItems: [],
       items: [],
       item: "",
     };
@@ -32,10 +34,11 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
 
   public async componentDidMount() {
     const local = localStorage.getItem("local");
-    let localItems: string[] = local ? local.split(",") : [];
+    const localItems: string[] = local ? local.split(",") : [];
     const itemsData: any[] = this.getItems(localItems);
     this.setState({
       items: [...this.state.items, ...itemsData],
+      localItems: localItems,
     });
   }
 
@@ -81,13 +84,14 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
         jsonItem = {
           checked: false,
           value: this.state.item,
-          date: "date now",
+          date: currentTime(),
         };
       }
-      const finalItems = [...this.state.items, this.state.item];
-      this.setState({ items: finalItems });
+      const localItems = [...this.state.localItems, this.state.item];
+      const items = [...this.state.items, jsonItem];
+      this.setState({ localItems, items });
 
-      localStorage.setItem("local", finalItems.toString());
+      localStorage.setItem("local", localItems.toString());
       localStorage.setItem(this.state.item, JSON.stringify(jsonItem));
       e.currentTarget.addTodo.value = "";
     } catch (err) {
@@ -140,7 +144,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
         return {
           checked: false,
           value: item,
-          date: "date now",
+          date: currentTime(),
         };
       }
     });
