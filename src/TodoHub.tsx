@@ -162,6 +162,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     let item: any;
     let storageItem: string | null = localStorage.getItem(data.name!);
 
+    debugger;
     if (storageItem) {
       item = JSON.parse(storageItem);
       item.checked = !item.checked;
@@ -174,6 +175,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
 
   private updateItemCheckbox = (item: any, items: any): any => {
     return items.map((prevItem: any) => {
+      debugger;
       if (prevItem.value === item.value) {
         prevItem.checked = item.checked;
       }
