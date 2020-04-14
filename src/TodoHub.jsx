@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { Component } from "react";
 import "./TodoHub.scss";
 import {
   Segment,
@@ -7,21 +7,12 @@ import {
   Input,
   List,
   Checkbox,
-  CheckboxProps,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { currentTime, todaysDateAlt } from "./Helpers/utilities";
 
-interface IHubProps {}
-interface IHubState {
-  localItems: string[];
-  item: string;
-  items: any[];
-  editItem: boolean;
-}
-
-class TodoHub extends React.Component<IHubProps, IHubState> {
-  constructor(props: IHubState) {
+class TodoHub extends Component {
+  constructor(props) {
     super(props);
     this.handleItemChange = this.handleItemChange.bind(this);
     this.addItem = this.addItem.bind(this);
@@ -36,17 +27,17 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     };
   }
 
-  public async componentDidMount() {
+  async componentDidMount() {
     const local = localStorage.getItem("local");
-    const localItems: string[] = local ? local.split(",") : [];
-    const itemsData: any[] = this.getItems(localItems);
+    const localItems = local ? local.split(",") : [];
+    const itemsData = this.getItems(localItems);
     this.setState({
       items: [...this.state.items, ...itemsData],
       localItems: localItems,
     });
   }
 
-  public render(): JSX.Element {
+  render() {
     return (
       <div className="main">
         <Segment className="mt-5 main-segment">
@@ -71,7 +62,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     );
   }
 
-  private renderItems(): JSX.Element[] {
+  renderItems() {
     let count = 0;
     return this.state.items.map((item) => {
       count++;
@@ -110,7 +101,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     });
   }
 
-  private getItems = (localItems: string[]): any[] => {
+  getItems = (localItems) => {
     return localItems.map((item) => {
       const getItem = localStorage.getItem(item);
       if (getItem) {
@@ -125,7 +116,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     });
   };
 
-  private editItem(e: FormEvent<HTMLFormElement>) {
+  editItem(e) {
     this.setState({ editItem: true });
     console.log("editItem");
     console.log("e :", e);
@@ -137,7 +128,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     }
   }
 
-  private addItem(e: FormEvent<HTMLFormElement>) {
+  addItem(e) {
     e.preventDefault();
 
     if (this.state.item.length < 1) {
@@ -145,8 +136,8 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     }
 
     try {
-      let jsonItem: any;
-      let getItem: string | null = localStorage.getItem(this.state.item);
+      let jsonItem;
+      let getItem = localStorage.getItem(this.state.item);
 
       if (getItem) {
         jsonItem = JSON.parse(getItem);
@@ -169,16 +160,13 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     }
   }
 
-  private handleItemChange(e: React.ChangeEvent<HTMLInputElement>) {
+  handleItemChange(e) {
     this.setState({ item: e.target.value });
   }
 
-  private handleCheckboxChange = (
-    e: React.FormEvent<HTMLInputElement>,
-    data: CheckboxProps
-  ): void => {
-    let item: any;
-    let storageItem: string | null = localStorage.getItem(data.name!);
+  handleCheckboxChange = (e, data) => {
+    let item;
+    let storageItem = localStorage.getItem(data.name);
 
     debugger;
     if (storageItem) {
@@ -191,8 +179,8 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     }
   };
 
-  private updateItemCheckbox = (item: any, items: any): any => {
-    return items.map((prevItem: any) => {
+  updateItemCheckbox = (item, items) => {
+    return items.map((prevItem) => {
       debugger;
       if (prevItem.value === item.value) {
         prevItem.checked = item.checked;

@@ -1,27 +1,27 @@
-export function todaysDate(): string {
+export function todaysDate() {
   const date = new Date();
-  const dayOfWeek: string = dayOfTheWeekShort();
-  const month: string = writtenShortMonth();
-  const day: number = date.getDate();
-  const year: number = date.getFullYear();
+  const dayOfWeek = dayOfTheWeekShort();
+  const month = writtenShortMonth();
+  const day = date.getDate();
+  const year = date.getFullYear();
 
-  const fullDate: string = `${dayOfWeek} ${month} ${day}, ${year}`;
+  const fullDate = `${dayOfWeek} ${month} ${day}, ${year}`;
   return fullDate;
 }
 
-export function todaysDateAlt(): string {
+export function todaysDateAlt() {
   const date = new Date().toDateString();
   const length = date.length;
   const d = date.substr(0, length - 5);
-  const year: number = new Date().getFullYear();
+  const year = new Date().getFullYear();
   return `${d}, ${year}`;
 }
 
-export function currentTime(): string {
+export function currentTime() {
   const date = new Date();
   const hours = amPmTime();
   let minsNum = date.getMinutes();
-  let mins: string = `${minsNum}`;
+  let mins = `${minsNum}`;
 
   if (minsNum.toString().split("").length !== 2) {
     mins = `0${minsNum}`;
@@ -30,7 +30,7 @@ export function currentTime(): string {
   return time;
 }
 
-export function currentDate(): string {
+export function currentDate() {
   const d = new Date();
   let month = addZero(d.getMonth() + 1);
   let day = addZero(d.getDate());
@@ -38,22 +38,22 @@ export function currentDate(): string {
   return currDate;
 }
 
-function addZero(num: number) {
+function addZero(num) {
   if (num.toString().length < 2)
     // Integer of less than two digits
     return "0" + num; // Prepend a zero!
   return num.toString(); // return string for consistency
 }
 
-function amPmTime(): any {
+function amPmTime() {
   const date = new Date();
   const hours = date.getHours() > 11 ? date.getHours() - 12 : date.getHours();
-  const amPm: string = date.getHours() > 11 ? "PM" : "AM";
+  const amPm = date.getHours() > 11 ? "PM" : "AM";
 
   return [hours, amPm];
 }
 
-function writtenShortMonth(): string {
+function writtenShortMonth() {
   const date = new Date();
   let month = [];
   month[0] = "Jan";
@@ -71,7 +71,7 @@ function writtenShortMonth(): string {
   return month[date.getMonth()];
 }
 
-function dayOfTheWeekShort(): string {
+function dayOfTheWeekShort() {
   const date = new Date();
   let day = [];
   day[0] = "Sun";
