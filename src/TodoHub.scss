@@ -21,6 +21,11 @@
   margin: 0 auto;
 }
 
+.item-right {
+  display: flex;
+  margin-left: auto;
+}
+
 .item-options {
   display: none;
 }
@@ -32,19 +37,20 @@
   &:hover .item-options {
     display: flex;
     align-items: flex-end;
-    margin-left: auto;
   }
-}
 
-.item-segment .edit-item {
-  &:hover {
-    color: darkgreen;
+  .edit-item {
+    padding: 0px 2px 0 6px;
+    &:hover {
+      color: darkgreen;
+    }
   }
-}
-.x-item {
-  color: darkred;
-  &:hover {
-    color: blue;
+
+  .x-item {
+    color: darkred;
+    &:hover {
+      color: blue;
+    }
   }
 }
 

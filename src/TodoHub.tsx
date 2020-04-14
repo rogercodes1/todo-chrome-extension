@@ -84,21 +84,23 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
           <List.Icon name="github" size="large" verticalAlign="middle" />
           <List.Content name={item.value}>
             <span id={item.value}>{item.value}</span>
-            <span> - {item.date}</span>
           </List.Content>
-          <div className="item-options">
-            <List.Icon
-              className="edit-item"
-              name="edit"
-              size="large"
-              verticalAlign="middle"
-            />
-            <List.Icon
-              className="x-item"
-              name="x"
-              size="large"
-              verticalAlign="middle"
-            />
+          <div className="item-right">
+            <div className="item-options">
+              <span> {item.date}</span>
+              <List.Icon
+                className="edit-item"
+                name="edit"
+                size="large"
+                verticalAlign="middle"
+              />
+              <List.Icon
+                className="x-item"
+                name="x"
+                size="large"
+                verticalAlign="middle"
+              />
+            </div>
           </div>
         </Segment>
       );
@@ -126,6 +128,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     if (this.state.item.length < 1) {
       return;
     }
+
     try {
       let jsonItem: any;
       let getItem: string | null = localStorage.getItem(this.state.item);
