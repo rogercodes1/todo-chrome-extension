@@ -17,6 +17,7 @@ interface IHubState {
   localItems: string[];
   item: string;
   items: any[];
+  editItem: boolean;
 }
 
 class TodoHub extends React.Component<IHubProps, IHubState> {
@@ -25,11 +26,13 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
     this.handleItemChange = this.handleItemChange.bind(this);
     this.addItem = this.addItem.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.editItem = this.editItem.bind(this);
 
     this.state = {
       localItems: [],
       items: [],
       item: "",
+      editItem: false,
     };
   }
 
@@ -44,7 +47,6 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
   }
 
   public render(): JSX.Element {
-    console.log("this.state.items", this.state.items);
     return (
       <div className="main">
         <Segment className="mt-5 main-segment">
@@ -82,7 +84,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
             onChange={this.handleCheckboxChange}
           />
           <List.Icon name="github" size="large" verticalAlign="middle" />
-          <List.Content name={item.value}>
+          <List.Content onClick={this.editItem} name={item.value}>
             <span id={item.value}>{item.value}</span>
           </List.Content>
           <div className="item-right">
@@ -91,6 +93,7 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
               <List.Icon
                 className="edit-item"
                 name="edit"
+                onClick={this.editItem}
                 size="large"
                 verticalAlign="middle"
               />
@@ -121,6 +124,18 @@ class TodoHub extends React.Component<IHubProps, IHubState> {
       }
     });
   };
+
+  private editItem(e: FormEvent<HTMLFormElement>) {
+    this.setState({ editItem: true });
+    console.log("editItem");
+    console.log("e :", e);
+    if (this.state.editItem) {
+      const itemValue = e.currentTarget.getAttribute("name");
+      e.currentTarget.innerHTML =
+        '<input type="text" value="' + itemValue + '"/>';
+      // debugger;
+    }
+  }
 
   private addItem(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
