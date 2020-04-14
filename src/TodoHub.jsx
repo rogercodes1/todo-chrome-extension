@@ -124,7 +124,6 @@ class TodoHub extends Component {
       const itemValue = e.currentTarget.getAttribute("name");
       e.currentTarget.innerHTML =
         '<input type="text" value="' + itemValue + '"/>';
-      // debugger;
     }
   }
 
